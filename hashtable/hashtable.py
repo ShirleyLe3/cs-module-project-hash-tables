@@ -14,27 +14,11 @@ MIN_CAPACITY = 8
 
 
 class HashTable:
-    """
-    A hash table that with `capacity` buckets
-    that accepts string keys
-
-    Implement this.
-    """
-
     def __init__(self, capacity):
         self.capacity = capacity
         self.storage = [None] * capacity
 
     def get_num_slots(self):
-        """
-        Return the length of the list you're using to hold the hash
-        table data. (Not the number of items stored in the hash table,
-        but the number of slots in the main list.)
-
-        One of the tests relies on this.
-
-        Implement this.
-        """
         return self.capacity
 
     def get_load_factor(self):
@@ -46,68 +30,36 @@ class HashTable:
         # Your code here
 
     def fnv1(self, key):
-        """
-        FNV-1 Hash, 64-bit
-
-        Implement this, and/or DJB2.
-        """
         encoded_key = key.encode()
         offset_basis = 14695981039346656037
         fnv_prime = 1099511628211
 
-        hash = offset_basis  # 64-bit offset_basis
+        hash_key = offset_basis  # 64-bit offset_basis
         for byte in encoded_key:
-            hash = hash * fnv_prime
-            hash = hash ^ byte
+            hash_key = hash_key * fnv_prime
+            hash_key = hash_key ^ byte
 
-        return hash
+        return hash_key
 
     def djb2(self, key):
-        """
-        DJB2 hash, 32-bit
-
-        Implement this, and/or FNV-1.
-        """
         pass
 
     def hash_index(self, key):
-        """
-        Take an arbitrary key and return a valid integer index
-        between within the storage capacity of the hash table.
-        """
         return self.fnv1(key) % self.capacity
 
     def put(self, key, value):
-        """
-        Store the value with the given key.
-
-        Hash collisions should be handled with Linked List Chaining.
-
-        Implement this.
-        """
+        # TODO linked-list chaining for collisions
         self.storage[self.hash_index(key)] = HashTableEntry(key, value)
 
     def delete(self, key):
-        """
-        Remove the value stored with the given key.
-
-        Print a warning if the key is not found.
-
-        Implement this.
-        """
+        # TODO traverse linked-list to remove item
         if self.storage[self.hash_index(key)]:
             self.storage[self.hash_index(key)] = None
         else:
-            print('Value not found.')
+            print("Value not found.")
 
     def get(self, key):
-        """
-        Retrieve the value stored with the given key.
-
-        Returns None if the key is not found.
-
-        Implement this.
-        """
+        # TODO traverse linked-list to get item
         if self.storage[self.hash_index(key)]:
             return self.storage[self.hash_index(key)].value
 
@@ -137,7 +89,7 @@ if __name__ == "__main__":
     # ht.put("line_11", "So rested he by the Tumtum tree")
     # ht.put("line_12", "And stood awhile in thought.")
 
-    print(ht.get('line_6'))
+    print(ht.get("line_6"))
     print("")
 
     # Test storing beyond capacity
