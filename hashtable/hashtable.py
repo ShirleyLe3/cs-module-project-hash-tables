@@ -47,7 +47,7 @@ class HashTable:
         return self.fnv1(key) % self.capacity
 
     def put(self, key, value):
-        if self.storage[self.hash_index(key)] is None:
+        if not self.storage[self.hash_index(key)]:
             self.storage[self.hash_index(key)] = HashTableEntry(key, value)
             self.count += 1
         else:
@@ -62,10 +62,10 @@ class HashTable:
                     current.next = HashTableEntry(key, value)
                     self.count += 1
                     break
-        # TODO if overloaded, resize
+        if self.get_load_factor() > 0.7:
+            self.resize(self.capacity * 2)
 
     def delete(self, key):
-        # TODO traverse linked-list to remove item
         if self.storage[self.hash_index(key)]:
             current = self.storage[self.hash_index(key)]
             if current.key == key:
@@ -74,7 +74,7 @@ class HashTable:
             elif current.next:
                 while True:
                     if current.next.key == key:
-                        current.next = None
+                        current.next = current.next.next
                         self.count -= 1
                         break
                     elif current.next is not None:
@@ -88,18 +88,28 @@ class HashTable:
             print("Value not found.")
 
     def get(self, key):
-        # TODO traverse linked-list to get item
         if self.storage[self.hash_index(key)]:
-            return self.storage[self.hash_index(key)].value
+            current = self.storage[self.hash_index(key)]
+            while True:
+                if current.key == key:
+                    return current.value
+                elif current.next:
+                    current = current.next
+                else:
+                    return None
 
     def resize(self, new_capacity):
-        """
-        Changes the capacity of the hash table and
-        rehashes all key/value pairs.
+        self.capacity = new_capacity
+        new_table = HashTable(new_capacity)
 
-        Implement this.
-        """
-        # Your code here
+        for entry in self.storage:
+            if entry:
+                new_table.put(entry.key, entry.value)
+                while entry.next:
+                    entry = entry.next
+                    new_table.put(entry.key, entry.value)
+
+        self.storage = new_table.storage
 
 
 if __name__ == "__main__":
@@ -121,18 +131,18 @@ if __name__ == "__main__":
     print("")
 
     # Test storing beyond capacity
-    # for i in range(1, 13):
-    #     print(ht.get(f"line_{i}"))
+    for i in range(1, 13):
+        print(ht.get(f"line_{i}"))
 
-    # # Test resizing
-    # old_capacity = ht.get_num_slots()
-    # ht.resize(ht.capacity * 2)
-    # new_capacity = ht.get_num_slots()
+    # Test resizing
+    old_capacity = ht.get_num_slots()
+    ht.resize(ht.capacity * 2)
+    new_capacity = ht.get_num_slots()
 
-    # print(f"\nResized from {old_capacity} to {new_capacity}.\n")
+    print(f"\nResized from {old_capacity} to {new_capacity}.\n")
 
     # Test if data intact after resizing
-    # for i in range(1, 13):
-    #     print(ht.get(f"line_{i}"))
+    for i in range(1, 13):
+        print(ht.get(f"line_{i}"))
 
-    # print("")
+    print("")
