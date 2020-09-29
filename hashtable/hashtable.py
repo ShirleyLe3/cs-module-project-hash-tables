@@ -8,7 +8,6 @@ class HashTableEntry:
         self.value = value
         self.next = None
 
-
 # Hash table can't have fewer than this many slots
 MIN_CAPACITY = 8
 
@@ -17,6 +16,7 @@ class HashTable:
     def __init__(self, capacity):
         self.capacity = capacity
         self.storage = [None] * capacity
+        self.count = 0
 
     def get_num_slots(self):
         return self.capacity
@@ -48,8 +48,22 @@ class HashTable:
         return self.fnv1(key) % self.capacity
 
     def put(self, key, value):
-        # TODO linked-list chaining for collisions
-        self.storage[self.hash_index(key)] = HashTableEntry(key, value)
+        if self.storage[self.hash_index(key)] is None:
+            self.storage[self.hash_index(key)] = HashTableEntry(key, value)
+            self.count += 1
+        else:
+            current = self.storage[self.hash_index(key)]
+            while True:
+                if current.key == key:
+                    current.value = value
+                    break
+                elif current.next is not None:
+                    current = current.next
+                else:
+                    current.next = HashTableEntry(key, value)
+                    self.count += 1
+                    break
+        #TODO if overloaded, resize
 
     def delete(self, key):
         # TODO traverse linked-list to remove item
