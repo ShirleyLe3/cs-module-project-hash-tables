@@ -86,6 +86,8 @@ class HashTable:
                 print("Value not found.")
         else:
             print("Value not found.")
+        if self.get_load_factor() < 0.2 and self.capacity > MIN_CAPACITY:
+            self.resize(self.capacity // 2)
 
     def get(self, key):
         if self.storage[self.hash_index(key)]:
@@ -128,7 +130,19 @@ if __name__ == "__main__":
     ht.put("line_11", "So rested he by the Tumtum tree")
     ht.put("line_12", "And stood awhile in thought.")
 
+    print('cap 1: ', ht.capacity)
     print("")
+
+    ht.delete("line_1")
+    ht.delete("line_2")
+    ht.delete("line_3")
+    ht.delete("line_4")
+    ht.delete("line_5")
+    ht.delete("line_6")
+    ht.delete("line_7")
+    ht.delete("line_8")
+   
+    print('cap 2: ', ht.capacity)
 
     # Test storing beyond capacity
     for i in range(1, 13):
