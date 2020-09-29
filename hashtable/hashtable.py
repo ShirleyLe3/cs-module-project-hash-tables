@@ -10,6 +10,8 @@ class HashTableEntry:
 
     def __repr__(self):
         return f"HashTableEntry({self.key}, {self.value})"
+
+
 # Hash table can't have fewer than this many slots
 MIN_CAPACITY = 8
 
@@ -60,12 +62,28 @@ class HashTable:
                     current.next = HashTableEntry(key, value)
                     self.count += 1
                     break
-        #TODO if overloaded, resize
+        # TODO if overloaded, resize
 
     def delete(self, key):
         # TODO traverse linked-list to remove item
         if self.storage[self.hash_index(key)]:
-            self.storage[self.hash_index(key)] = None
+            current = self.storage[self.hash_index(key)]
+            if current.key == key:
+                self.storage[self.hash_index(key)] = current.next
+                self.count -= 1
+            elif current.next:
+                while True:
+                    if current.next.key == key:
+                        current.next = None
+                        self.count -= 1
+                        break
+                    elif current.next is not None:
+                        current = current.next
+                    else:
+                        print("Value not found.")
+                        break
+            else:
+                print("Value not found.")
         else:
             print("Value not found.")
 
