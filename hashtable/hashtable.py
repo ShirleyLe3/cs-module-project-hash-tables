@@ -8,6 +8,8 @@ class HashTableEntry:
         self.value = value
         self.next = None
 
+    def __repr__(self):
+        return f"HashTableEntry({self.key}, {self.value})"
 # Hash table can't have fewer than this many slots
 MIN_CAPACITY = 8
 
@@ -22,12 +24,7 @@ class HashTable:
         return self.capacity
 
     def get_load_factor(self):
-        """
-        Return the load factor for this hash table.
-
-        Implement this.
-        """
-        # Your code here
+        return self.count / self.capacity
 
     def fnv1(self, key):
         encoded_key = key.encode()
@@ -98,12 +95,11 @@ if __name__ == "__main__":
     ht.put("line_6", "The jaws that bite, the claws that catch!")
     ht.put("line_7", "Beware the Jubjub bird, and shun")
     ht.put("line_8", 'The frumious Bandersnatch!"')
-    # ht.put("line_9", "He took his vorpal sword in hand;")
-    # ht.put("line_10", "Long time the manxome foe he sought--")
-    # ht.put("line_11", "So rested he by the Tumtum tree")
-    # ht.put("line_12", "And stood awhile in thought.")
+    ht.put("line_9", "He took his vorpal sword in hand;")
+    ht.put("line_10", "Long time the manxome foe he sought--")
+    ht.put("line_11", "So rested he by the Tumtum tree")
+    ht.put("line_12", "And stood awhile in thought.")
 
-    print(ht.get("line_6"))
     print("")
 
     # Test storing beyond capacity
