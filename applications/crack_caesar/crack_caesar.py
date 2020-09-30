@@ -51,8 +51,6 @@ def crack(s):
     for i, tup in enumerate(count):
         decipher[tup[0]] = freq[i][0]
 
-    print(decipher)
-
     output = ''
     for l in s:
         if l in decipher:
