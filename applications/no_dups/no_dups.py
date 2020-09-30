@@ -1,5 +1,12 @@
 def no_dups(s):
-    pass
+    words = dict()
+    new_string = []
+    for word in s.split(' '):
+        if word not in words:
+            words[word] = None
+            new_string.append(word)
+    new_string = ' '.join(new_string)
+    return new_string
 
 if __name__ == "__main__":
     print(no_dups(""))
