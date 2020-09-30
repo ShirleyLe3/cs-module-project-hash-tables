@@ -47,45 +47,48 @@ class HashTable:
         return self.fnv1(key) % self.capacity
 
     def put(self, key, value):
-        if not self.storage[self.hash_index(key)]:
-            self.storage[self.hash_index(key)] = HashTableEntry(key, value)
+        hi = self.hash_index(key)
+
+        if not self.storage[hi]:
+            self.storage[hi] = HashTableEntry(key, value)
             self.count += 1
         else:
-            current = self.storage[self.hash_index(key)]
+            current = self.storage[hi]
             while True:
                 if current.key == key:
                     current.value = value
                     break
-                elif current.next is not None:
+                elif current.next:
                     current = current.next
                 else:
                     current.next = HashTableEntry(key, value)
                     self.count += 1
                     break
+
         if self.get_load_factor() > 0.7:
             self.resize(self.capacity * 2)
 
     def delete(self, key):
-        if self.storage[self.hash_index(key)]:
-            current = self.storage[self.hash_index(key)]
-            if current.key == key:
-                self.storage[self.hash_index(key)] = current.next
-                self.count -= 1
-            elif current.next:
-                while True:
-                    if current.next.key == key:
-                        current.next = current.next.next
-                        self.count -= 1
-                        break
-                    elif current.next is not None:
-                        current = current.next
-                    else:
-                        print("Value not found.")
-                        break
-            else:
-                print("Value not found.")
+        hi = self.hash_index(key)
+        current = self.storage[hi]
+
+        if current and current.key == key:
+            self.storage[hi] = current.next
+            self.count -= 1
+        elif current and current.next:
+            while True:
+                if current.next.key == key:
+                    current.next = current.next.next
+                    self.count -= 1
+                    break
+                elif current.next:
+                    current = current.next
+                else:
+                    print("Key not found.")
+                    break
         else:
-            print("Value not found.")
+            print("Key not found.")
+
         if self.get_load_factor() < 0.2 and self.capacity > MIN_CAPACITY:
             self.resize(self.capacity // 2)
 
@@ -130,7 +133,7 @@ if __name__ == "__main__":
     ht.put("line_11", "So rested he by the Tumtum tree")
     ht.put("line_12", "And stood awhile in thought.")
 
-    print('cap 1: ', ht.capacity)
+    print("cap 1: ", ht.capacity)
     print("")
 
     ht.delete("line_1")
@@ -141,8 +144,8 @@ if __name__ == "__main__":
     ht.delete("line_6")
     ht.delete("line_7")
     ht.delete("line_8")
-   
-    print('cap 2: ', ht.capacity)
+
+    print("cap 2: ", ht.capacity)
 
     # Test storing beyond capacity
     for i in range(1, 13):
