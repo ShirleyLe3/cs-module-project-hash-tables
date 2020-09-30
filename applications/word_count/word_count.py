@@ -1,14 +1,12 @@
-import re
-
-
 def word_count(s):
     count = dict()
+    # normalize whitespace, remove special characters
     s = " ".join(s.split())
     s = s.translate(str.maketrans("", "", '":;,.-+=/\\|[]{}()*^&')).lower().split(" ")
     for word in s:
         if word == "":
             pass
-        elif word in count:
+        if word in count:
             count[word] += 1
         else:
             count[word] = 1
