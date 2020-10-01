@@ -35,8 +35,8 @@ freq = {
 freq = list(freq.items())
 
 def crack(s):
+    #count freqency of letters in ciphertext
     count = dict()
-    cipher = "".join(s.split())
     cipher = s.translate(str.maketrans("", "", ' \'\n":;,.-+=?!1/\\|[]{}()*^&â€”'))
     
     for l in cipher:
@@ -47,10 +47,12 @@ def crack(s):
     count = list(count.items())
     count.sort(key=lambda tup: tup[1], reverse=True)
 
+    #create decipher table
     decipher = dict()
     for i, tup in enumerate(count):
         decipher[tup[0]] = freq[i][0]
 
+    #decipher ciphertext
     output = ''
     for l in s:
         if l in decipher:
