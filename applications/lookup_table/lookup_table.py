@@ -17,12 +17,10 @@ for x in range(2, 14):
         print(lookup[(x, y)], 'x: ', x, 'y: ', y)
 
 def slowfun(x, y):
-    """
-    Rewrite slowfun_too_slow() in here so that the program produces the same
-    output, but completes quickly instead of taking ages to run.
-    """
     if (x, y) in lookup:
         return lookup[(x, y)]
+    else:
+        return slowfun_too_slow(x, y)
 
 
 
