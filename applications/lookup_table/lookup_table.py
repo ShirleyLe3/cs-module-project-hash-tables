@@ -17,10 +17,9 @@ for x in range(2, 14):
         print(lookup[(x, y)], 'x: ', x, 'y: ', y)
 
 def slowfun(x, y):
-    if (x, y) in lookup:
-        return lookup[(x, y)]
-    else:
-        return slowfun_too_slow(x, y)
+    if (x, y) not in lookup:
+        lookup[(x, y)] = slowfun_too_slow(x, y)
+    return lookup[(x, y)]
 
 
 
